@@ -133,8 +133,8 @@ my $where = " WHERE t.ArchiveLocation = '$tarchive'";
 if ($globArchiveLocation) {
     $where = " WHERE t.ArchiveLocation LIKE '%/".basename($tarchive)."'";
 }
-$query  = "SELECT COUNT(*) FROM mri_upload m
-                         JOIN tarchive t on (t.TarchiveID=m.TarchiveID) $where";
+$query  = "SELECT COUNT(*) FROM mri_upload m " .
+          "JOIN tarchive t on (t.TarchiveID=m.TarchiveID) $where";
 ##print $query . "\n";
 my $count = $dbh->selectrow_array($query);
 if($count>0) {
@@ -163,9 +163,12 @@ my $tarchiveID = $dbh->selectrow_array($query);
 ##my $type_from_file = $ft->checktype_filename($file);
 ###and then insert it
 
-
-$query = "INSERT INTO mri_upload SET UploadedBy='$User', UploadDate=NOW() , 
-          TarchiveID ='$tarchiveID' , SourceLocation='$source_location'";
+chomp($User); # Remove the \n at the end of $User to make the query clearer 
+$query = "INSERT INTO mri_upload " .
+         "SET UploadedBy='$User', " .
+             "UploadDate=NOW(), " .
+             "TarchiveID ='$tarchiveID', " .
+             "SourceLocation='$source_location'";
 print $query . "\n";
 $dbh->do($query);
 
