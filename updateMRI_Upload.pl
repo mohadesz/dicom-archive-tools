@@ -130,7 +130,7 @@ my $where = " WHERE t.ArchiveLocation =?";
 
 if ($globArchiveLocation) {
     $where = " WHERE t.ArchiveLocation LIKE ?";
-    $tarchive_path = basename($tarchive);
+    $tarchive_path = '%' . basename($tarchive);
 }
 
 $query  = "SELECT COUNT(*) FROM mri_upload m JOIN tarchive t ON".
@@ -139,7 +139,7 @@ $sth = $dbh->prepare($query);
 $sth->execute($tarchive_path);
 my $count = $sth->fetchrow_array;
 if($count>0) {
-   print "\n\tERROR: the tarchive is already uploaded \n\n"; 
+   print "\n\tERROR: the tarchive has already been uploaded in mri_upload table \n\n"; 
    exit 6;
 } 
 
